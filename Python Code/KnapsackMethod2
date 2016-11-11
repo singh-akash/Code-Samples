@@ -1,0 +1,35 @@
+element_values = [30, 14, 16, 9]
+element_weights = [6, 3, 4, 2]
+max_weight = 10
+number_of_elements = len(element_values)
+
+# Setting A to unknown
+A = [[0 for x in range(max_weight + 1)] for x in range(number_of_elements)]
+# Initialize A array
+for i in range(number_of_elements):
+	for j in range(max_weight + 1):
+		A[i][j] = -1
+
+"""
+W is the max weight
+e_w is the list of elements weights
+e_v is the list of elements element_values
+n is the number of elements
+rem_wt is the rem_wt in the knapsack
+"""
+def knapsack(W, e_w, e_v, n, rem_wt):
+	if (n < 0):
+		return 0
+
+	# if value of A[n][rem_wt] is not unknown, return it, without recomputing.
+	if (A[n][rem_wt] != -1):
+		return A[n][rem_wt]
+
+	if (rem_wt >= e_w[n]):
+		A[n][rem_wt] = max(e_v[n] + knapsack(W, e_w, e_v, n - 1, rem_wt - e_w[n]), knapsack(W, e_w, e_v, n - 1, rem_wt))
+	else:
+		A[n][rem_wt] = knapsack(W, e_w, e_v, n - 1, rem_wt)
+
+	return A[n][rem_wt]
+
+print(knapsack(max_weight, element_weights, element_values, number_of_elements - 1, max_weight))
